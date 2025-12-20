@@ -33,7 +33,7 @@ export async function analyzeTranscript(transcript: string): Promise<{
         throw new Error("GOOGLE_API_KEY is not set");
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-3-pro-preview" });
+    const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
 
     const prompt = `
     You are an expert thumbnail designer for "Really American", a political commentary channel known for sensationalist, high-contrast, and emotionally charged thumbnails.

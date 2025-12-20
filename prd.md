@@ -254,13 +254,13 @@ System Output:
 
 | Function | Model | Purpose |
 |----------|-------|---------|
-| Transcript Analysis | `gemini-3-pro-preview` | Analyzes story, extracts headline, emotions, narrative summary, visual elements |
+| Transcript Analysis | `gemini-3-flash-preview` | Analyzes story, extracts headline, emotions, narrative summary, visual elements |
 | Image Generation | `gemini-3-pro-image-preview` | Generates photorealistic thumbnail images with text overlays |
 | Chat Refinement | `gemini-3-pro-preview` | Interprets user feedback for iterative refinement |
 
 ```javascript
 // Transcript Analysis
-const model = genAI.getGenerativeModel({ model: "gemini-3-pro-preview" });
+const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
 
 // Image Generation (with responseModalities for image output)
 const model = genAI.getGenerativeModel({ 
@@ -273,7 +273,7 @@ const model = genAI.getGenerativeModel({
 
 ### Actual Data Flow (Implemented)
 1. **Input** → User pastes transcript/story context
-2. **Analysis** → Gemini 3 Pro extracts:
+2. **Analysis** → Gemini 3 Flash extracts:
    - Template recommendation + reasoning
    - Headline (2-5 words, ALL CAPS)
    - Target & Opponent names/emotions
@@ -337,7 +337,7 @@ GOOGLE_API_KEY=your_gemini_api_key
 
 ### ✅ Implemented
 - ✅ All 3 templates (Conflict, Bad News, Freeflow)
-- ✅ Transcript analysis with Gemini 3 Pro
+- ✅ Transcript analysis with Gemini 3 Flash
 - ✅ Advanced variable extraction (headline, emotions, narrative, visual elements)
 - ✅ Multi-turn chat refinement (unlimited iterations)
 - ✅ Direct image download functionality
