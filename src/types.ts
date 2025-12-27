@@ -23,6 +23,8 @@ export interface ChatMessage {
     content: string;
     imageUrl?: string;
     timestamp: Date;
+    isError?: boolean; // Flag to indicate if this is an error message that can be retried
+    retryAction?: () => void; // Function to call when retry is clicked
 }
 
 export interface ReferenceImage {

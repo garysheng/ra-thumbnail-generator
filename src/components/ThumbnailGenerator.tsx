@@ -220,6 +220,8 @@ export function ThumbnailGenerator() {
                             role: 'assistant',
                             content: "Sorry, I couldn't generate the image. Please try again or adjust your settings.",
                             timestamp: new Date(),
+                            isError: true,
+                            retryAction: () => handleGenerateImage(true),
                         }
                     ]
                 }));
@@ -319,6 +321,8 @@ export function ThumbnailGenerator() {
                             role: 'assistant',
                             content: "Sorry, I couldn't apply those changes. Try being more specific or regenerate the thumbnail.",
                             timestamp: new Date(),
+                            isError: true,
+                            retryAction: () => handleGenerateImage(true), // Retry by regenerating
                         }
                     ]
                 }));
@@ -945,7 +949,41 @@ export function ThumbnailGenerator() {
                                 )}
                             </div>
 
-                            {/* Regenerate Button */}
+                            {/* Retry Button - Show when no image but there was an error */}
+                            {!generatedImage && !isGeneratingImage && state.chatHistory.some(msg => msg.isError) && (
+                                <div className="space-y-4">
+                                    {quotaCooldown > 0 && (
+                                        <div className="bg-red-900/10 border border-red-900/30 rounded-xl p-4 text-center backdrop-blur-sm">
+                                            <p className="text-red-400 text-sm font-black uppercase mb-1 tracking-tighter">API Rate Limit Active</p>
+                                            <p className="text-neutral-400 text-xs">Available again in <span className="text-white font-mono">{quotaCooldown}s</span></p>
+                                        </div>
+                                    )}
+                                    <button
+                                        onClick={() => handleGenerateImage(true)}
+                                        disabled={isGeneratingImage || quotaCooldown > 0}
+                                        className="w-full bg-brand-yellow hover:bg-yellow-400 text-black p-4 rounded-xl font-black uppercase text-base transition-all transform hover:translate-y-[-2px] active:translate-y-[0] shadow-lg flex items-center justify-center gap-3 disabled:opacity-50 disabled:transform-none"
+                                    >
+                                        {isGeneratingImage ? (
+                                            <>
+                                                <RefreshCw className="animate-spin" size={20} />
+                                                Generating...
+                                            </>
+                                        ) : quotaCooldown > 0 ? (
+                                            <>
+                                                <RefreshCw size={20} />
+                                                Cooldown ({quotaCooldown}s)
+                                            </>
+                                        ) : (
+                                            <>
+                                                <RefreshCw size={20} />
+                                                Retry Generation
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
+                            )}
+
+                            {/* Regenerate Button - Show when image exists */}
                             {generatedImage && (
                                 <div className="space-y-4">
                                     {quotaCooldown > 0 && (
@@ -1017,6 +1055,8 @@ export function ThumbnailGenerator() {
                                             "max-w-[85%] rounded-xl p-3",
                                             msg.role === 'user' 
                                                 ? "bg-brand-yellow text-black" 
+                                                : msg.isError
+                                                ? "bg-red-900/20 border border-red-900/50 text-white"
                                                 : "bg-neutral-800 text-white"
                                         )}>
                                             <p className="text-sm">{msg.content}</p>
@@ -1029,9 +1069,21 @@ export function ThumbnailGenerator() {
                                                     />
                                                 </div>
                                             )}
-                                            <p className="text-xs opacity-50 mt-1">
-                                                {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                            </p>
+                                            <div className="flex items-center justify-between mt-2">
+                                                <p className="text-xs opacity-50">
+                                                    {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                </p>
+                                                {msg.isError && msg.retryAction && (
+                                                    <button
+                                                        onClick={msg.retryAction}
+                                                        disabled={isGeneratingImage || quotaCooldown > 0}
+                                                        className="text-xs bg-brand-yellow hover:bg-yellow-400 text-black px-3 py-1 rounded font-bold uppercase transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
+                                                    >
+                                                        <RefreshCw size={12} />
+                                                        Retry
+                                                    </button>
+                                                )}
+                                            </div>
                                         </div>
                                     </motion.div>
                                 ))}
