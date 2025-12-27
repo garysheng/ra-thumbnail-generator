@@ -64,40 +64,6 @@ export default function AboutPage() {
               </div>
             </section>
 
-            <section className="bg-neutral-950/50 border border-neutral-800 rounded-xl p-6">
-              <h2 className="text-xl font-bold text-white uppercase tracking-wide mb-4">What's New in v0.1.1</h2>
-              <div className="space-y-3 text-sm">
-                <div className="flex items-start gap-3">
-                  <span className="text-brand-yellow font-bold">•</span>
-                  <div>
-                    <p className="text-white font-medium mb-1">Substack Optimization</p>
-                    <p className="text-neutral-400">Changed aspect ratio from 16:9 (YouTube) to 14:10 (1456 x 1048 pixels) for Substack social previews.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="text-brand-yellow font-bold">•</span>
-                  <div>
-                    <p className="text-white font-medium mb-1">Speech Bubble Toggle</p>
-                    <p className="text-neutral-400">Added option to disable speech bubble in thumbnails via checkbox in the Customize step.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="text-brand-yellow font-bold">•</span>
-                  <div>
-                    <p className="text-white font-medium mb-1">Free Text Expressions</p>
-                    <p className="text-neutral-400">Changed expression fields from dropdown menus to free text inputs, allowing any expression you want.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <span className="text-brand-yellow font-bold">•</span>
-                  <div>
-                    <p className="text-white font-medium mb-1">Performance Improvements</p>
-                    <p className="text-neutral-400">Switched story analysis to Gemini 3 Flash for faster and more cost-effective processing.</p>
-                  </div>
-                </div>
-              </div>
-            </section>
-
             <section className="bg-brand-yellow/10 border border-brand-yellow/20 rounded-xl p-6">
               <h2 className="text-xl font-bold text-brand-yellow uppercase tracking-wide mb-4 flex items-center gap-2">
                 <Bug size={20} />

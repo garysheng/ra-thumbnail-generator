@@ -207,7 +207,7 @@ RIGHT SIDE (THE WINNER):
 
 OVERLAYS (MUST INCLUDE):
 - Large curved BRIGHT YELLOW (#FFF200) arrow pointing from right to left (winner to loser)
-${data.showSpeechBubble !== false && data.bubbleText ? `- White speech bubble with thick black outline near ${data.opponentName || 'right figure'} containing: "${data.bubbleText}"` : ''}
+${data.showSpeechBubble !== false && data.bubbleText ? `- White speech bubble with thick black outline near ${data.opponentName || 'right figure'} containing: "${data.bubbleText}"` : '- DO NOT include any speech bubbles or text bubbles'}
 - MASSIVE bottom banner: "${data.headline}" in IMPACT font, BRIGHT YELLOW (#FFF200), 5px black stroke
 
 ${refinementInstruction ? `REFINEMENT REQUEST: ${refinementInstruction}` : ''}`;
@@ -236,7 +236,7 @@ BACKGROUND & STORY-SPECIFIC ELEMENTS:
 - Fire, chaos elements as appropriate to the story
 
 OVERLAYS (MUST INCLUDE):
-${data.showSpeechBubble !== false && data.bubbleText ? `- Corner inset box with text: "${data.bubbleText}" - make this prominent and scary` : ''}
+${data.showSpeechBubble !== false && data.bubbleText ? `- Corner inset box with text: "${data.bubbleText}" - make this prominent and scary` : '- DO NOT include any speech bubbles, text bubbles, or corner inset boxes'}
 - MASSIVE bottom banner: "${data.headline}" in IMPACT font, BRIGHT YELLOW (#FFF200), 5px black stroke
 - Red warning graphics/alerts scattered
 
@@ -257,7 +257,7 @@ Include the story-specific visual elements listed above.
 SUBJECT: ${data.targetName}
 EXPRESSION: ${data.targetEmotion}
 HEADLINE: "${data.headline}"
-${data.showSpeechBubble !== false && data.bubbleText ? `SPEECH BUBBLE: "${data.bubbleText}"` : ''}
+${data.showSpeechBubble !== false && data.bubbleText ? `SPEECH BUBBLE: "${data.bubbleText}"` : 'DO NOT include any speech bubbles or text bubbles'}
 
 Include dramatic lighting, high contrast, and sensationalist political commentary aesthetic.
 Text overlay in BRIGHT YELLOW (#FFF200) Impact font with black stroke.
