@@ -1,5 +1,7 @@
 export type TemplateType = 'conflict' | 'bad-news' | 'freeflow';
 
+export type AspectRatio = '14:10' | '19:10';
+
 export interface ThumbnailData {
     headline: string;
     targetName: string;
@@ -10,6 +12,7 @@ export interface ThumbnailData {
     opponentEmotion?: string;
     bubbleText?: string;
     showSpeechBubble?: boolean; // Option to disable speech bubble
+    aspectRatio?: AspectRatio; // Aspect ratio for thumbnail (default: 14:10)
     arrowDirection?: 'left' | 'right';
     // Story context for rich image generation
     storyContext?: string;

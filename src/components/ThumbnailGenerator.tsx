@@ -42,6 +42,7 @@ export function ThumbnailGenerator() {
             targetEmotion: "Panicked",
             bubbleText: "",
             showSpeechBubble: true, // Default to showing speech bubble
+            aspectRatio: "14:10", // Default to Substack 14:10
         },
         referenceImages: [],
         chatHistory: [],
@@ -715,6 +716,39 @@ export function ThumbnailGenerator() {
                                     </>
                                 )}
                             </div>
+                            
+                            {/* Aspect Ratio Selector */}
+                            <div className="mt-4">
+                                <label className="text-xs text-neutral-500 uppercase font-bold mb-2 block">Aspect Ratio</label>
+                                <div className="flex gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => setState(prev => ({ ...prev, data: { ...prev.data, aspectRatio: '14:10' } }))}
+                                        className={cn(
+                                            "flex-1 px-4 py-3 rounded-lg border-2 font-bold uppercase text-sm transition-all",
+                                            state.data.aspectRatio === '14:10' || !state.data.aspectRatio
+                                                ? "bg-brand-yellow text-black border-brand-yellow"
+                                                : "bg-neutral-950 text-neutral-400 border-neutral-800 hover:border-neutral-600"
+                                        )}
+                                    >
+                                        14:10
+                                        <span className="block text-xs font-normal mt-1 opacity-70">Substack (1456×1048)</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setState(prev => ({ ...prev, data: { ...prev.data, aspectRatio: '19:10' } }))}
+                                        className={cn(
+                                            "flex-1 px-4 py-3 rounded-lg border-2 font-bold uppercase text-sm transition-all",
+                                            state.data.aspectRatio === '19:10'
+                                                ? "bg-brand-yellow text-black border-brand-yellow"
+                                                : "bg-neutral-950 text-neutral-400 border-neutral-800 hover:border-neutral-600"
+                                        )}
+                                    >
+                                        19:10
+                                        <span className="block text-xs font-normal mt-1 opacity-70">Wide (1900×1000)</span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
                         {/* Reference Images Upload */}
@@ -874,6 +908,13 @@ export function ThumbnailGenerator() {
                                                 <p className="text-brand-yellow text-xs mt-1 uppercase font-bold">{state.data.opponentEmotion}</p>
                                             </div>
                                         )}
+                                        <div className="bg-neutral-950 p-3 rounded-lg border border-neutral-800">
+                                            <span className="text-neutral-500 text-xs font-bold uppercase block mb-1">Aspect Ratio</span>
+                                            <p className="text-white font-medium">{state.data.aspectRatio || '14:10'}</p>
+                                            <p className="text-neutral-500 text-xs mt-1">
+                                                {state.data.aspectRatio === '19:10' ? '1900×1000 pixels' : '1456×1048 pixels'}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -915,8 +956,8 @@ export function ThumbnailGenerator() {
                                 )}
                             </div>
 
-                            {/* Preview Area - 14:10 aspect ratio for Substack (1456 x 1048) */}
-                            <div className="bg-neutral-900 rounded-2xl border-2 border-neutral-800 overflow-hidden relative shadow-2xl group ring-1 ring-white/5" style={{ aspectRatio: '14/10' }}>
+                            {/* Preview Area - Dynamic aspect ratio */}
+                            <div className="bg-neutral-900 rounded-2xl border-2 border-neutral-800 overflow-hidden relative shadow-2xl group ring-1 ring-white/5" style={{ aspectRatio: (state.data.aspectRatio || '14:10').replace(':', '/') }}>
                                 {isGeneratingImage ? (
                                     <div className="absolute inset-0 flex flex-col items-center justify-center bg-neutral-900/90 backdrop-blur-sm z-20">
                                         <div className="relative">

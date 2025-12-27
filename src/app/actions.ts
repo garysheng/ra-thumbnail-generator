@@ -1,7 +1,18 @@
 'use server';
 
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
-import { TemplateType, ThumbnailData, ChatMessage, ReferenceImage } from "@/types";
+import { TemplateType, ThumbnailData, ChatMessage, ReferenceImage, AspectRatio } from "@/types";
+
+// Helper function to get dimensions for aspect ratio
+function getAspectRatioDimensions(aspectRatio: AspectRatio | undefined): { width: number; height: number; ratio: string } {
+    switch (aspectRatio) {
+        case '19:10':
+            return { width: 1900, height: 1000, ratio: '19:10' };
+        case '14:10':
+        default:
+            return { width: 1456, height: 1048, ratio: '14:10' };
+    }
+}
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || '');
 
@@ -96,6 +107,10 @@ export async function analyzeTranscript(transcript: string): Promise<{
         if (parsed.data.showSpeechBubble === undefined) {
             parsed.data.showSpeechBubble = true;
         }
+        // Default to 14:10 aspect ratio if not specified
+        if (!parsed.data.aspectRatio) {
+            parsed.data.aspectRatio = '14:10';
+        }
 
         return parsed;
     } catch (error) {
@@ -110,6 +125,7 @@ export async function analyzeTranscript(transcript: string): Promise<{
                 targetEmotion: "Neutral",
                 bubbleText: "Error",
                 showSpeechBubble: true,
+                aspectRatio: '14:10',
                 storyContext: transcript
             }
         };
@@ -156,6 +172,10 @@ Use these reference images according to their descriptions:
 - Incorporate the visual elements, expressions, or scenes shown in the references`
         : '';
 
+    // Get aspect ratio dimensions
+    const aspectRatio = data.aspectRatio || '14:10';
+    const dimensions = getAspectRatioDimensions(aspectRatio);
+
     const style = `Style: Sensationalist political commentary thumbnail for "Really American" channel. 
 High contrast, photorealistic portraits, 8k resolution, cinematic dramatic lighting.
 CRITICAL: Generate photorealistic faces/portraits that capture the essence and recognizable features of the subjects mentioned. Make expressions exaggerated and dramatic.
@@ -171,7 +191,7 @@ ${narrativeSummary}
 
 ${visualElementsList}
 
-COMPOSITION: Vertical split-screen, 14:10 aspect ratio Substack thumbnail (1456 x 1048 pixels).
+COMPOSITION: Vertical split-screen, ${aspectRatio} aspect ratio thumbnail (${dimensions.width} x ${dimensions.height} pixels).
 
 LEFT SIDE (THE LOSER):
 - Subject: ${data.targetName} (generate their recognizable likeness)
@@ -199,7 +219,7 @@ ${narrativeSummary}
 
 ${visualElementsList}
 
-COMPOSITION: Dramatic collage, 14:10 aspect ratio Substack thumbnail (1456 x 1048 pixels).
+COMPOSITION: Dramatic collage, ${aspectRatio} aspect ratio thumbnail (${dimensions.width} x ${dimensions.height} pixels).
 
 MAIN SUBJECT (FOREGROUND):
 - ${data.targetName} (generate their recognizable likeness)
@@ -229,7 +249,7 @@ ${narrativeSummary}
 
 ${visualElementsList}
 
-COMPOSITION: Creative Substack thumbnail, 14:10 aspect ratio (1456 x 1048 pixels).
+COMPOSITION: Creative thumbnail, ${aspectRatio} aspect ratio (${dimensions.width} x ${dimensions.height} pixels).
 
 Create a dramatic, attention-grabbing thumbnail that captures this specific story.
 Include the story-specific visual elements listed above.
