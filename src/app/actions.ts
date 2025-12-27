@@ -107,9 +107,9 @@ export async function analyzeTranscript(transcript: string): Promise<{
         if (parsed.data.showSpeechBubble === undefined) {
             parsed.data.showSpeechBubble = true;
         }
-        // Default to 14:10 aspect ratio if not specified
+        // Default to 19:10 aspect ratio if not specified
         if (!parsed.data.aspectRatio) {
-            parsed.data.aspectRatio = '14:10';
+            parsed.data.aspectRatio = '19:10';
         }
 
         return parsed;
@@ -125,7 +125,7 @@ export async function analyzeTranscript(transcript: string): Promise<{
                 targetEmotion: "Neutral",
                 bubbleText: "Error",
                 showSpeechBubble: true,
-                aspectRatio: '14:10',
+                aspectRatio: '19:10',
                 storyContext: transcript
             }
         };
@@ -172,8 +172,8 @@ Use these reference images according to their descriptions:
 - Incorporate the visual elements, expressions, or scenes shown in the references`
         : '';
 
-    // Get aspect ratio dimensions
-    const aspectRatio = data.aspectRatio || '14:10';
+    // Get aspect ratio dimensions (always 19:10)
+    const aspectRatio = data.aspectRatio || '19:10';
     const dimensions = getAspectRatioDimensions(aspectRatio);
 
     const style = `Style: Sensationalist political commentary thumbnail for "Really American" channel. 
@@ -335,17 +335,17 @@ ${refinementInstruction ? `REFINEMENT REQUEST: ${refinementInstruction}` : ''}`;
 
         for (const candidate of candidates) {
             if (candidate.content && candidate.content.parts) {
-                for (const part of candidate.content.parts) {
-                    if (part.inlineData) {
-                        imageData = `data:image/png;base64,${part.inlineData.data}`;
-                    }
+            for (const part of candidate.content.parts) {
+                if (part.inlineData) {
+                    imageData = `data:image/png;base64,${part.inlineData.data}`;
+                }
                     if (part.text) {
                         console.log("Model returned text instead of image:", part.text);
                     }
-                    // @ts-ignore - thoughtSignature is not in official types yet
-                    if (part.thoughtSignature) {
-                        // @ts-ignore
-                        thoughtSignature = part.thoughtSignature;
+                // @ts-ignore - thoughtSignature is not in official types yet
+                if (part.thoughtSignature) {
+                    // @ts-ignore
+                    thoughtSignature = part.thoughtSignature;
                     }
                 }
             }
