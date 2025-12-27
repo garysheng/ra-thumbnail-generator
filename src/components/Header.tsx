@@ -26,7 +26,7 @@ export function Header() {
                         <Info size={16} />
                         <span className="hidden sm:inline">About</span>
                     </Link>
-                    <div className="text-xs text-neutral-500 font-mono">v0.1.0</div>
+                    <div className="text-xs text-neutral-500 font-mono">v0.1.1</div>
                 </div>
             </div>
         </header>

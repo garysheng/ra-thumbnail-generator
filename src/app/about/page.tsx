@@ -29,11 +29,18 @@ export default function AboutPage() {
               <h2 className="text-xl font-bold text-white uppercase tracking-wide mb-3 flex items-center gap-2">
                 For the Really American Team
               </h2>
-              <p>
+              <p className="mb-4">
                 This AI-powered Thumbnail Generator is custom-built for the Really American Media production team. 
                 It's designed to dramatically speed up our workflow by generating high-quality, brand-consistent 
                 thumbnails directly from video transcripts or story contexts.
               </p>
+              <div className="bg-brand-yellow/10 border border-brand-yellow/30 rounded-lg p-4">
+                <p className="text-sm text-brand-yellow font-bold uppercase mb-1">📌 Currently Optimized For:</p>
+                <p className="text-neutral-300 text-sm">
+                  <strong className="text-white">Substack</strong> - Thumbnails are generated at 14:10 aspect ratio (1456 x 1048 pixels), 
+                  which is the recommended size for Substack social previews. YouTube thumbnail support may be added in the future.
+                </p>
+              </div>
             </section>
 
             <section className="grid md:grid-cols-2 gap-4">
@@ -57,13 +64,47 @@ export default function AboutPage() {
               </div>
             </section>
 
+            <section className="bg-neutral-950/50 border border-neutral-800 rounded-xl p-6">
+              <h2 className="text-xl font-bold text-white uppercase tracking-wide mb-4">What's New in v0.1.1</h2>
+              <div className="space-y-3 text-sm">
+                <div className="flex items-start gap-3">
+                  <span className="text-brand-yellow font-bold">•</span>
+                  <div>
+                    <p className="text-white font-medium mb-1">Substack Optimization</p>
+                    <p className="text-neutral-400">Changed aspect ratio from 16:9 (YouTube) to 14:10 (1456 x 1048 pixels) for Substack social previews.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-brand-yellow font-bold">•</span>
+                  <div>
+                    <p className="text-white font-medium mb-1">Speech Bubble Toggle</p>
+                    <p className="text-neutral-400">Added option to disable speech bubble in thumbnails via checkbox in the Customize step.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-brand-yellow font-bold">•</span>
+                  <div>
+                    <p className="text-white font-medium mb-1">Free Text Expressions</p>
+                    <p className="text-neutral-400">Changed expression fields from dropdown menus to free text inputs, allowing any expression you want.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-brand-yellow font-bold">•</span>
+                  <div>
+                    <p className="text-white font-medium mb-1">Performance Improvements</p>
+                    <p className="text-neutral-400">Switched story analysis to Gemini 3 Flash for faster and more cost-effective processing.</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
             <section className="bg-brand-yellow/10 border border-brand-yellow/20 rounded-xl p-6">
               <h2 className="text-xl font-bold text-brand-yellow uppercase tracking-wide mb-4 flex items-center gap-2">
                 <Bug size={20} />
                 Report Bugs & Feedback
               </h2>
               <p className="mb-4">
-                This tool is in active development (v0.1.0). If you encounter any issues, have feature requests, 
+                This tool is in active development (v0.1.1). If you encounter any issues, have feature requests, 
                 or just want to share feedback, please reach out directly:
               </p>
               

@@ -9,6 +9,7 @@ export interface ThumbnailData {
     opponentImage?: string;
     opponentEmotion?: string;
     bubbleText?: string;
+    showSpeechBubble?: boolean; // Option to disable speech bubble
     arrowDirection?: 'left' | 'right';
     // Story context for rich image generation
     storyContext?: string;

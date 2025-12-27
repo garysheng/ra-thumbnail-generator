@@ -41,6 +41,7 @@ export function ThumbnailGenerator() {
             targetName: "",
             targetEmotion: "Panicked",
             bubbleText: "",
+            showSpeechBubble: true, // Default to showing speech bubble
         },
         referenceImages: [],
         chatHistory: [],
@@ -643,13 +644,25 @@ export function ThumbnailGenerator() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="text-xs text-neutral-500 uppercase font-bold mb-1 block">Speech Bubble</label>
+                                    <div className="flex items-center justify-between mb-2">
+                                        <label className="text-xs text-neutral-500 uppercase font-bold block">Speech Bubble</label>
+                                        <label className="flex items-center gap-2 cursor-pointer">
+                                            <input
+                                                type="checkbox"
+                                                checked={state.data.showSpeechBubble !== false}
+                                                onChange={(e) => setState(prev => ({ ...prev, data: { ...prev.data, showSpeechBubble: e.target.checked } }))}
+                                                className="w-4 h-4 rounded border-neutral-700 bg-neutral-950 text-brand-yellow focus:ring-brand-yellow focus:ring-2"
+                                            />
+                                            <span className="text-xs text-neutral-400">Show bubble</span>
+                                        </label>
+                                    </div>
                                     <input
                                         type="text"
                                         value={state.data.bubbleText || ''}
                                         onChange={(e) => setState(prev => ({ ...prev, data: { ...prev.data, bubbleText: e.target.value } }))}
                                         placeholder="e.g., IT'S OVER!"
-                                        className="w-full bg-neutral-950 border border-neutral-800 rounded p-3 text-white focus:border-brand-yellow outline-none"
+                                        disabled={state.data.showSpeechBubble === false}
+                                        className="w-full bg-neutral-950 border border-neutral-800 rounded p-3 text-white focus:border-brand-yellow outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                                     />
                                 </div>
                                 <div>
@@ -664,18 +677,13 @@ export function ThumbnailGenerator() {
                                 </div>
                                 <div>
                                     <label className="text-xs text-neutral-500 uppercase font-bold mb-1 block">Target Expression</label>
-                                    <select
+                                    <input
+                                        type="text"
                                         value={state.data.targetEmotion}
                                         onChange={(e) => setState(prev => ({ ...prev, data: { ...prev.data, targetEmotion: e.target.value } }))}
+                                        placeholder="e.g., Panicked, Terrified, Angry, Crying, Shocked, Sweating..."
                                         className="w-full bg-neutral-950 border border-neutral-800 rounded p-3 text-white focus:border-brand-yellow outline-none"
-                                    >
-                                        <option>Panicked</option>
-                                        <option>Terrified</option>
-                                        <option>Angry</option>
-                                        <option>Crying</option>
-                                        <option>Shocked</option>
-                                        <option>Sweating</option>
-                                    </select>
+                                    />
                                 </div>
 
                                 {state.selectedTemplate === 'conflict' && (
@@ -692,17 +700,13 @@ export function ThumbnailGenerator() {
                                         </div>
                                         <div>
                                             <label className="text-xs text-neutral-500 uppercase font-bold mb-1 block">Opponent Expression</label>
-                                            <select
-                                                value={state.data.opponentEmotion || 'Mocking'}
+                                            <input
+                                                type="text"
+                                                value={state.data.opponentEmotion || ''}
                                                 onChange={(e) => setState(prev => ({ ...prev, data: { ...prev.data, opponentEmotion: e.target.value } }))}
+                                                placeholder="e.g., Mocking, Laughing, Stern, Smirking, Confident..."
                                                 className="w-full bg-neutral-950 border border-neutral-800 rounded p-3 text-white focus:border-brand-yellow outline-none"
-                                            >
-                                                <option>Mocking</option>
-                                                <option>Laughing</option>
-                                                <option>Stern</option>
-                                                <option>Smirking</option>
-                                                <option>Confident</option>
-                                            </select>
+                                            />
                                         </div>
                                     </>
                                 )}
@@ -848,10 +852,12 @@ export function ThumbnailGenerator() {
                                             <span className="text-neutral-500 text-xs font-bold uppercase block mb-1">Headline</span>
                                             <p className="text-white font-bold text-lg leading-tight">{state.data.headline}</p>
                                         </div>
-                                        <div className="bg-neutral-950 p-3 rounded-lg border border-neutral-800">
-                                            <span className="text-neutral-500 text-xs font-bold uppercase block mb-1">Speech Bubble</span>
-                                            <p className="text-white text-lg">{state.data.bubbleText}</p>
-                                        </div>
+                                        {state.data.showSpeechBubble !== false && (
+                                            <div className="bg-neutral-950 p-3 rounded-lg border border-neutral-800">
+                                                <span className="text-neutral-500 text-xs font-bold uppercase block mb-1">Speech Bubble</span>
+                                                <p className="text-white text-lg">{state.data.bubbleText || '—'}</p>
+                                            </div>
+                                        )}
                                         <div className="bg-neutral-950 p-3 rounded-lg border border-neutral-800">
                                             <span className="text-neutral-500 text-xs font-bold uppercase block mb-1">Target</span>
                                             <p className="text-white font-medium">{state.data.targetName}</p>
@@ -905,8 +911,8 @@ export function ThumbnailGenerator() {
                                 )}
                             </div>
 
-                            {/* Preview Area */}
-                            <div className="aspect-video bg-neutral-900 rounded-2xl border-2 border-neutral-800 overflow-hidden relative shadow-2xl group ring-1 ring-white/5">
+                            {/* Preview Area - 14:10 aspect ratio for Substack (1456 x 1048) */}
+                            <div className="bg-neutral-900 rounded-2xl border-2 border-neutral-800 overflow-hidden relative shadow-2xl group ring-1 ring-white/5" style={{ aspectRatio: '14/10' }}>
                                 {isGeneratingImage ? (
                                     <div className="absolute inset-0 flex flex-col items-center justify-center bg-neutral-900/90 backdrop-blur-sm z-20">
                                         <div className="relative">

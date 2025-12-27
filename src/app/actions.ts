@@ -30,7 +30,8 @@ export async function analyzeTranscript(transcript: string): Promise<{
     data: ThumbnailData;
 }> {
     if (!process.env.GOOGLE_API_KEY) {
-        throw new Error("GOOGLE_API_KEY is not set");
+        console.error("GOOGLE_API_KEY environment variable is missing. Please set it in your deployment platform's environment variables.");
+        throw new Error("GOOGLE_API_KEY is not set. Please configure it in your deployment environment variables.");
     }
 
     const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
@@ -91,6 +92,10 @@ export async function analyzeTranscript(transcript: string): Promise<{
         
         // Inject the original transcript as story context
         parsed.data.storyContext = transcript;
+        // Default to showing speech bubble if not specified
+        if (parsed.data.showSpeechBubble === undefined) {
+            parsed.data.showSpeechBubble = true;
+        }
 
         return parsed;
     } catch (error) {
@@ -104,6 +109,7 @@ export async function analyzeTranscript(transcript: string): Promise<{
                 targetName: "Subject",
                 targetEmotion: "Neutral",
                 bubbleText: "Error",
+                showSpeechBubble: true,
                 storyContext: transcript
             }
         };
@@ -119,7 +125,8 @@ export async function generateThumbnailImage(
     previousImage?: { base64: string; thoughtSignature?: string }
 ): Promise<{ imageUrl: string; thoughtSignature?: string }> {
     if (!process.env.GOOGLE_API_KEY) {
-        throw new Error("GOOGLE_API_KEY is not set");
+        console.error("GOOGLE_API_KEY environment variable is missing. Please set it in your deployment platform's environment variables.");
+        throw new Error("GOOGLE_API_KEY is not set. Please configure it in your deployment environment variables.");
     }
 
     // Use Gemini 2.0 Flash for image generation (supports native image output)
@@ -149,7 +156,7 @@ Use these reference images according to their descriptions:
 - Incorporate the visual elements, expressions, or scenes shown in the references`
         : '';
 
-    const style = `Style: Sensationalist political commentary YouTube thumbnail for "Really American" channel. 
+    const style = `Style: Sensationalist political commentary thumbnail for "Really American" channel. 
 High contrast, photorealistic portraits, 8k resolution, cinematic dramatic lighting.
 CRITICAL: Generate photorealistic faces/portraits that capture the essence and recognizable features of the subjects mentioned. Make expressions exaggerated and dramatic.
 IMPORTANT: DO NOT include the text "Really American" or any channel logos/watermarks in the image.${referenceImageNote}`;
@@ -164,7 +171,7 @@ ${narrativeSummary}
 
 ${visualElementsList}
 
-COMPOSITION: Vertical split-screen, 16:9 aspect ratio YouTube thumbnail.
+COMPOSITION: Vertical split-screen, 14:10 aspect ratio Substack thumbnail (1456 x 1048 pixels).
 
 LEFT SIDE (THE LOSER):
 - Subject: ${data.targetName} (generate their recognizable likeness)
@@ -180,7 +187,7 @@ RIGHT SIDE (THE WINNER):
 
 OVERLAYS (MUST INCLUDE):
 - Large curved BRIGHT YELLOW (#FFF200) arrow pointing from right to left (winner to loser)
-- White speech bubble with thick black outline near ${data.opponentName || 'right figure'} containing: "${data.bubbleText}"
+${data.showSpeechBubble !== false && data.bubbleText ? `- White speech bubble with thick black outline near ${data.opponentName || 'right figure'} containing: "${data.bubbleText}"` : ''}
 - MASSIVE bottom banner: "${data.headline}" in IMPACT font, BRIGHT YELLOW (#FFF200), 5px black stroke
 
 ${refinementInstruction ? `REFINEMENT REQUEST: ${refinementInstruction}` : ''}`;
@@ -192,7 +199,7 @@ ${narrativeSummary}
 
 ${visualElementsList}
 
-COMPOSITION: Dramatic collage, 16:9 aspect ratio YouTube thumbnail.
+COMPOSITION: Dramatic collage, 14:10 aspect ratio Substack thumbnail (1456 x 1048 pixels).
 
 MAIN SUBJECT (FOREGROUND):
 - ${data.targetName} (generate their recognizable likeness)
@@ -209,7 +216,7 @@ BACKGROUND & STORY-SPECIFIC ELEMENTS:
 - Fire, chaos elements as appropriate to the story
 
 OVERLAYS (MUST INCLUDE):
-- Corner inset box with text: "${data.bubbleText}" - make this prominent and scary
+${data.showSpeechBubble !== false && data.bubbleText ? `- Corner inset box with text: "${data.bubbleText}" - make this prominent and scary` : ''}
 - MASSIVE bottom banner: "${data.headline}" in IMPACT font, BRIGHT YELLOW (#FFF200), 5px black stroke
 - Red warning graphics/alerts scattered
 
@@ -222,7 +229,7 @@ ${narrativeSummary}
 
 ${visualElementsList}
 
-COMPOSITION: Creative YouTube thumbnail, 16:9 aspect ratio.
+COMPOSITION: Creative Substack thumbnail, 14:10 aspect ratio (1456 x 1048 pixels).
 
 Create a dramatic, attention-grabbing thumbnail that captures this specific story.
 Include the story-specific visual elements listed above.
@@ -230,7 +237,7 @@ Include the story-specific visual elements listed above.
 SUBJECT: ${data.targetName}
 EXPRESSION: ${data.targetEmotion}
 HEADLINE: "${data.headline}"
-SPEECH BUBBLE: "${data.bubbleText}"
+${data.showSpeechBubble !== false && data.bubbleText ? `SPEECH BUBBLE: "${data.bubbleText}"` : ''}
 
 Include dramatic lighting, high contrast, and sensationalist political commentary aesthetic.
 Text overlay in BRIGHT YELLOW (#FFF200) Impact font with black stroke.
@@ -373,7 +380,8 @@ export async function refineThumbnailWithChat(
     previousImage?: { base64: string; thoughtSignature?: string }
 ): Promise<{ imageUrl: string; thoughtSignature?: string; assistantMessage: string }> {
     if (!process.env.GOOGLE_API_KEY) {
-        throw new Error("GOOGLE_API_KEY is not set");
+        console.error("GOOGLE_API_KEY environment variable is missing. Please set it in your deployment platform's environment variables.");
+        throw new Error("GOOGLE_API_KEY is not set. Please configure it in your deployment environment variables.");
     }
 
     // Use Gemini for understanding the refinement request
